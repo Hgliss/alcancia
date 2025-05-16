@@ -1,0 +1,34 @@
+ const listarDispositivos = async () => {
+    try {
+      const paired = await BluetoothSerial.list();
+      setDevices(paired);
+    } catch (error) {
+      Alert.alert('Error', 'No se pudieron obtener los dispositivos emparejados');
+    }
+  };
+
+  const conectarDispositivo = async (device: any) => {
+    try {
+      const connected = await BluetoothSerial.connect(device.id);
+      if (connected) {
+        setConnectedDevice(device);
+        Alert.alert('Conectado', `Conectado con ${device.name}`);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo conectar al dispositivo');
+    }
+  };
+
+  const abrirAlcancia = async () => {
+    if (!connectedDevice) {
+      Alert.alert('Error', 'Primero debes conectarte a un dispositivo');
+      return;
+    }
+
+    try {
+      await BluetoothSerial.write('abrir\n');
+      Alert.alert('Éxito', 'Comando enviado para abrir la alcancía');
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo enviar el comando');
+    }
+  };
